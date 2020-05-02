@@ -1,26 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import './App.css'
+import Membre from './Membre'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const famille ={
+  membre1: {
+    nom: 'Sophia',
+    age: 30
+  },
+  membre2: {
+    nom: 'Abdellah',
+    age: 32
+  }
+}
+class App extends Component {
+  state = {
+    famille
+  }
+
+
+  render () {
+
+    const listeMembre = Object.keys(famille)
+      .map(
+        membre => (
+          <Membre nom={famille[membre].nom} age={famille[membre].age} />
+        )
+      )
+
+    return (
+      <div className='App'>
+        <h1>Bonjour tout le monde!</h1>
+        {listeMembre}
+      </div>
+    )
+  }
 }
 
-export default App;
+export default App

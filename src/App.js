@@ -12,6 +12,10 @@ const famille = {
   membre2: {
     nom: 'Abdellah',
     age: 32
+  },
+  membre3: {
+    nom: 'Yanis',
+    age: 2
   }
 }
 class App extends Component {
@@ -20,9 +24,9 @@ class App extends Component {
     isShow: false
   }
 
-  handleClick = (pas) => {
+  handleClick = (pas, id) => {
     const { famille } = { ...this.state }
-    famille.membre1.age += pas
+    famille[id].age += pas
     this.setState(famille)
   }
 
@@ -31,15 +35,21 @@ class App extends Component {
     this.setState({ isShow })
   }
 
+  handleChange = (event, id) => {
+    const { famille } = { ...this.state }
+    const nom = event.target.value
+    famille[id].nom = nom
+    this.setState(famille)
+  }
+
+  cacherNom = (id) => {
+    const { famille } = { ...this.state }
+    famille[id].nom = 'X'
+    this.setState(famille)
+  }
+
   render() {
     const { famille, isShow } = this.state
-    const listeMembre = Object.keys(famille)
-      .map(
-        membre => (
-          <Membre nom={famille[membre].nom} age={famille[membre].age} />
-        )
-      )
-
     let description = null
     if (isShow) {
       description = (
@@ -50,19 +60,21 @@ class App extends Component {
       )
     }
 
+    const listeMembre = Object.keys(famille)
+      .map(
+        membre => (
+          <Membre key={membre} nom={famille[membre].nom} age={famille[membre].age}
+            cacherNom={() => this.cacherNom(membre)}
+            handleChange={event => this.handleChange(event, membre)}
+            description={description} handleShowDescription={this.handleShowDescription}
+            handleClick={() => this.handleClick(2, membre)}/>
+        )
+      )
+
     return (
       <div className='App'>
         <h1>Bonjour tout le monde!</h1>
         {listeMembre}
-        <Membre nom='Yanis' age='2'>
-          {description}
-          <button onClick={this.handleShowDescription}>
-            {
-              this.state.isShow ? 'Cacher' : 'Montrer'
-            }
-          </button>
-        </Membre>
-        <Button vieillir={() => this.handleClick(2)} name='Vieillir de 2 ans' />
       </div>
     )
   }
